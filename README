@@ -92,34 +92,22 @@ createiso.sh - installation script to modify RHEL 6.4+ ISO image
 EXAMPLE
 =======
 
-# ./createiso.sh rhel-server-6.5-x86_64-dvd.iso
+# ./createiso.sh -b /tmp -r ~/rpmbuild/RPMS/noarch/stig-fix-1.7.8-el6.noarch.rpm -i /software/ISOs/rhel-server-6.5-x86_64-dvd.iso
 Mounting RHEL DVD Image...
 mount: /dev/loop0 is write-protected, mounting read-only
 Done.
 Copying RHEL DVD Image... Done.
 Modifying RHEL DVD Image... Done.
 Remastering RHEL DVD Image...
-I: -input-charset not specified, using utf-8 (detected in locale settings)
-Using RELEA000.HTM;1 for  /RELEASE-NOTES-ja-JP.html (RELEASE-NOTES-ta-IN.html)
-	<..........................................>
-Using POLIC003.RPM;1 for  ./Packages/policycoreutils-python-2.0.83-19.39.el6.x86_64.rpm (policycoreutils-newrole-2.0.83-19.39.el6.x86_64.rpm)
-Size of boot image is 4 sectors -> No emulation
-  0.27% done, estimate finish Tue Jan 21 22:04:41 2014
-	<...........................................>
- 99.86% done, estimate finish Tue Jan 21 22:06:46 2014
-Total translation table size: 976326
-Total rockridge attributes bytes: 430528
-Total directory bytes: 661504
-Path table size(bytes): 286
-Max brk space used 3ee000
-1882600 extents written (3676 MB)
+Removing working directory...
 Done.
 Signing RHEL DVD Image...
 Inserting md5sum into iso image...
-md5 = ec4618f4ccc6ccac3cfed291ef341012
+md5 = d81b3cd62a8b84bacd19e5197377894a
 Inserting fragment md5sums into iso image...
-fragmd5 = e115ca49531d6adfee6caadeaf6a895cdc4c3e8b9341f58f5e11e9113a79
+fragmd5 = e4ca91dc7cad7fbc477f4dea7688d5d57c497c4d667174958ce2c6aeb21d
 frags = 20
 Setting supported flag to 0
 Done.
-DVD Created. [rhel-stig-fix.iso]
+Hardened RHEL 6 ISO image ready. [rhel-stig-fix.iso]
+

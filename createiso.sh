@@ -15,7 +15,7 @@
 ###############################################################################
 
 # for debugging
-#set -x
+set -x
 
 # GLOBAL VARIABLES
 readonly DIR=$(pwd)
@@ -56,7 +56,7 @@ main () {
             b)
                 # banner
                 classification_banner_path=${OPTARG}
-		;;
+                ;;
             h)
                 usage
                 exit 0
@@ -64,11 +64,11 @@ main () {
             i)
                 # RHEL ISO
                 rhel_iso=${OPTARG}
-		;;
+                ;;
             r)
                 # STIG FIX RPM
                 stig_fix_rpm=${OPTARG}
-		;;
+                ;;
             ?)
                 echo "ERROR: Invalid Option Provided!"
                 echo
@@ -92,7 +92,7 @@ main () {
     fi
 
     if [[ -z "$stig_fix_rpm" ]]; then
-	echo "Please specify the location of the stig fix rpm."
+        echo "Please specify the location of the stig fix rpm."
         usage
         exit 1
     fi
@@ -111,7 +111,7 @@ main () {
         exit 1
     fi
 
-    if [[ ! -f "$stif_fix_rpm" ]]; then
+    if [[ ! -f "$stig_fix_rpm" ]]; then
         echo "STIG FIX RPM ${stig_fix_rpm} is not a regular file or it is not readable."
         usage
         exit 1
@@ -136,7 +136,7 @@ create_iso () {
     local iso="$3"
 
     # Determine if DVD is Bootable
-    file $1 | grep 9660 | grep -q bootable
+    file $iso | grep 9660 | grep -q bootable
     if [[ $? -eq 0 ]]; then
         echo "Mounting RHEL DVD Image..."
         mkdir -p /rhel
@@ -146,21 +146,21 @@ create_iso () {
         # Tests DVD for RHEL 6.4+
         if [[ $(grep "Red Hat" /rhel/.discinfo | awk '{ print $5 }' | awk -F '.' '{ print $1 }') -ne 6 ]]; then
             echo "ERROR: Image is not RHEL 6.4+"
-	    cleanup
+            cleanup
             exit 1
         fi
         if [[ $(grep "Red Hat" /rhel/.discinfo | awk '{ print $5 }' | awk -F '.' '{ print $2 }') -lt 4 ]]; then
             echo "ERROR: Image is not RHEL 6.4+"
-	    cleanup
+            cleanup
             exit 1
         fi
 
         echo -n "Copying the mounted RHEL DVD Image to the working directory..."
-	mkdir $DIR/rhel-dvd
+        mkdir $DIR/rhel-dvd
         cp -a /rhel/* $DIR/rhel-dvd/
         cp -a /rhel/.discinfo $DIR/rhel-dvd/
         echo " Done."
-	cleanup
+        cleanup
     else
         echo "ERROR: ISO image is not bootable."
         exit 1
