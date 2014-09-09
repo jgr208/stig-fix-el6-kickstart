@@ -10,7 +10,7 @@
 # Copyright: Red Hat, (c) 2013
 # Version: 1.3
 # License: GPLv2
-# Description: Kickstart Installation of RHEL 6 with DISA STIG 
+# Description: Kickstart Installation of RHEL 6 with DISA STIG
 ###############################################################################
 
 
@@ -19,25 +19,25 @@ ABOUT
 
 Modifies a RHEL 6.4+ x86_64 Workstation or Server DVD with a kickstart
 that will install a system that is configured with the DISA STIG for
-Red Hat Enterprise Linux 6. 
+Red Hat Enterprise Linux 6.
 
-The kickstart script involves the integration of the following projects 
+The kickstart script involves the integration of the following projects
 into a single installer:
 
    - stig-fix-1.7.8.el6.noarch.rpm (Hardening scripts from DISA STIG RPM scripts)
-   
+
         https://github.com/RedHatGov/stig-fix-el6
 
    - classification-banner.py (Python for displaying graphical classification banner)
-   
+
         https://github.com/RedHatGov/classification-banner
 
    - SCAP Security Guide (SSG) Content - Benchmark for the system after installation
-   
+
         https://github.com/OpenSCAP/scap-security-guide
 
    - DOD Firefox Plugin
-   
+
         http://www.forge.mil/Resources-Firefox.html
 
 
@@ -51,17 +51,17 @@ createiso.sh - installation script to modify RHEL 6.4+ ISO image
 		isolinux.cfg - Menu Configuration for Kickstart
 	stig-fix/
 		stig-fix.cfg
-		
+
 			Kickstart Configuration (Calls menu.py in %pre)
-		
+
 		menu.py
-		
+
 			Python Script that presents a graphical menu to modify the
-			kickstart. Contains the "Profiles" for configuring the 
+			kickstart. Contains the "Profiles" for configuring the
 			system partitioning and packages.
 
 		classification-banner.py
-		
+
 			Graphical Classification Banner (for GNOME Desktops User/
 			Developer Workstation Profiles)
 
@@ -84,7 +84,7 @@ createiso.sh - installation script to modify RHEL 6.4+ ISO image
 		scap-security-guide-0.1-17.el6.noarch.rpm
 
 			WILL BE REMOVED WITH RHEL 6.6 (SSG will be part of baseline)
-			
+
 			Currently I use ths SSG Scripts to take a benchmark to save in
 			root after installation.
 
@@ -92,7 +92,7 @@ createiso.sh - installation script to modify RHEL 6.4+ ISO image
 EXAMPLE
 =======
 
-# ./createiso.sh rhel-server-6.5-x86_64-dvd.iso 
+# ./createiso.sh rhel-server-6.5-x86_64-dvd.iso
 Mounting RHEL DVD Image...
 mount: /dev/loop0 is write-protected, mounting read-only
 Done.
