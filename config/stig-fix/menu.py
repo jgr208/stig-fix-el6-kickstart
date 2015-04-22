@@ -1122,7 +1122,10 @@ class Display_Menu:
 
 			# Write Kickstart Configuration
 			f = open('/tmp/stig-fix','w')
-			f.write('network --device eth0 --bootproto static --ip=192.168.1.100 --netmask=255.255.255.0 --onboot=on --noipv6 --hostname '+self.hostname.get_text()+'\n')
+			if int(self.system_profile.get_active()) > 0:
+				f.write('network --device eth0 --bootproto dhcp --noipv6 --hostname '+self.hostname.get_text()+'\n')
+			else:
+				f.write('network --device eth0 --bootproto static --ip=192.168.1.100 --netmask=255.255.255.0 --onboot=on --noipv6 --hostname '+self.hostname.get_text()+'\n')
 			f.write('rootpw --iscrypted '+str(self.password)+'\n')
 			f.write('bootloader --location=mbr --driveorder='+str(self.data["INSTALL_DRIVES"])+' --append="crashkernel=auto rhgb quiet audit=1" --password='+str(self.password)+'\n')
 			#f.close()
