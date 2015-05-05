@@ -367,7 +367,7 @@ class Display_Menu:
                 self.label = gtk.Label('    Note: LVM Partitions should add up to 100% or less before proceeding.     <b>Currently Used:</b> ')
 		self.label.set_use_markup(True)
                 self.partition_message.pack_start(self.label,False,True,0)
-		self.partition_used = gtk.Label('95%')
+		self.partition_used = gtk.Label('100%')
                 self.partition_message.pack_start(self.partition_used,False,True,0)
                 self.vbox.add(self.partition_message)
 
@@ -456,8 +456,8 @@ class Display_Menu:
 			self.var_partition.set_value(10)
 			self.log_partition.set_value(10)
 			self.audit_partition.set_value(10)
-			self.home_partition.set_value(25)
-			self.root_partition.set_value(30)
+			self.home_partition.set_value(15)
+			self.root_partition.set_value(45)
 			# Post Configuration (nochroot)
 			f = open('/tmp/stig-fix-post-nochroot','w')
 			f.write('')
@@ -1125,7 +1125,7 @@ class Display_Menu:
 			if int(self.system_profile.get_active()) > 0:
 				f.write('network --device eth0 --bootproto dhcp --noipv6 --hostname '+self.hostname.get_text()+'\n')
 			else:
-				f.write('network --device eth0 --bootproto static --ip=192.168.1.100 --netmask=255.255.255.0 --onboot=on --noipv6 --hostname '+self.hostname.get_text()+'\n')
+				f.write('network --device eth0 --bootproto static --ip=192.168.1.101 --netmask=255.255.255.0 --onboot=on --noipv6 --hostname '+self.hostname.get_text()+'\n')
 			f.write('rootpw --iscrypted '+str(self.password)+'\n')
 			f.write('bootloader --location=mbr --driveorder='+str(self.data["INSTALL_DRIVES"])+' --append="crashkernel=auto rhgb quiet audit=1" --password='+str(self.password)+'\n')
 			#f.close()
