@@ -412,6 +412,7 @@ class Display_Menu:
 		f.write('dialog\n')
 		f.write('dmidecode\n')
 		f.write('aide\n')
+		f.write('tcpdump\n')
 		f.close()
 
 
@@ -479,6 +480,7 @@ class Display_Menu:
 			f.write('dialog\n')
 			f.write('dmidecode\n')
 			f.write('aide\n')
+			f.write('tcpdump\n')
 			f.close()
 
 		################################################################################################################
@@ -530,6 +532,7 @@ class Display_Menu:
 			f.write('gcc-c++\n')
 			f.write('dos2unix\n')
 			f.write('kernel-devel\n')
+			f.write('tcpdump\n')
 			f.write('gcc\n')
 			f.write('dialog\n')
 			f.write('dmidecode\n')
