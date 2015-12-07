@@ -2,7 +2,8 @@
 # Graphical Kickstart Script
 #
 # This script was written by Frank Caviggia, Red Hat Consulting
-# Last update was 25 July 2014
+# edit by Jason Ricles, Mikros Systems Corp
+# Last update was 7 December 2015
 # This script is NOT SUPPORTED by Red Hat Global Support Services.
 # Please contact Josh Waldman for more information.
 #
@@ -265,16 +266,29 @@ class Display_Menu:
 
                 # Disk Encryption (Ability to disable LUKS for self encrypting drives)
                 self.encrypt = gtk.HBox()
-
+		self.core = gtk.HBox()
+		self.tim = gtk.HBox()
 		self.label = gtk.Label("                             ")
                 self.encrypt.pack_start(self.label, False, True, 0)
-
+		self.label = gtk.Label("                             ")
+                self.core.pack_start(self.label, False, True, 0)	
+		self.label = gtk.Label("                             ")
+                self.tim.pack_start(self.label, False, True, 0)			
 
 		self.encrypt_disk = gtk.CheckButton('Encrypt Drives with LUKS')
+		self.core_install = gtk.CheckButton('CORE')
+		self.tim_install = gtk.CheckButton('TIM')
 		self.encrypt_disk.set_active(True)
+		self.core_install.set_active(False)
+		self.tim_install.set_active(False)
 		self.encrypt.pack_start(self.encrypt_disk, False, True, 0)
-
+		self.core.pack_start(self.core_install, False, True, 0)
+		self.tim.pack_start(self.tim_install, False, True, 0)
+		self.tim_install.connect("clicked",self.choose)
+		self.core_install.connect("clicked",self.choose)
 		self.vbox.add(self.encrypt)
+		self.vbox.add(self.core)
+		self.vbox.add(self.tim)
 		# Minimal Installation Warning
 		if self.disk_total < 8:
 			self.MessageBox(self.window,"<b>Recommended minimum of 8Gb disk space for a Minimal Install!</b>\n\n You have "+str(self.disk_total)+"Gb available.",gtk.MESSAGE_WARNING)
@@ -425,7 +439,7 @@ class Display_Menu:
 
 	# Shows Help for Main Install
         def show_help_main(self,args):
-		self.help_text = ("<b>Install Help</b>\n\n- All LVM partitions need to take less than or equal to 100% of the LVM Volume Group.\n\n- Pressing OK prompts for a password to encrypt Disk (LUKS) and Root password. GRUB is installed with a randomly generated password. Use the 'grubby' command to modify grub configuration and the 'grub-crypt' command to generate a new password for grub.\n\n- To access root remotely via ssh you need to create a user and add them to the wheel and sshusers groups.\n\n- Minimum password length is 14 characters, using a strong password is recommended.\n")
+		self.help_text = ("<b>Install Help</b>\n\n- All LVM partitions need to take less than or equal to 100% of the LVM Volume Group.\n\n- Pressing OK prompts for a password to encrypt Disk (LUKS) and Root password. GRUB is installed with a randomly generated password. Use the 'grubby' command to modify grub configuration and the 'grub-crypt' command to generate a new password for grub.\n\n- To access root remotely via ssh you need to create a user and add them to the wheel and sshusers groups.\n\n- Minimum password length is 15 characters, using a strong password is recommended.\n")
                 self.MessageBox(self.window,self.help_text,gtk.MESSAGE_INFO)
 
 
@@ -495,7 +509,7 @@ class Display_Menu:
 			self.var_partition.set_value(10)
 			self.log_partition.set_value(10)
 			self.audit_partition.set_value(10)
-			self.home_partition.set_value(12)
+			self.home_partition.set_value(10)
 			self.root_partition.set_value(45)
 			# Post Configuration (nochroot)
 			f = open('/tmp/stig-fix-post-nochroot','w')
@@ -1000,6 +1014,11 @@ class Display_Menu:
 		else:
 			return True
 
+	def choose(self, widget):
+		if self.tim_install.get_active() == True and self.core_install.get_active():
+			self.MessageBox(self.window,"<b>Can not have both TIM and CORE install!</b>",gtk.MESSAGE_ERROR)
+			self.tim_install.set_active(False)
+			self.core_install.set_active(False)
 
 	# Display Message Box (e.g. Help Screen, Warning Screen, etc.)
 	def MessageBox(self,parent,text,type=gtk.MESSAGE_INFO):
@@ -1047,11 +1066,11 @@ class Display_Menu:
 			if self.a == self.b:
 				if len(self.a) == 0:
 					return
-				elif len(self.a) >= 14:
+				elif len(self.a) >= 15:
 					self.passwd = self.a
 					break
 				else:
-					self.MessageBox(self.window,"<b>Password too short! 14 Characters Required.</b>",gtk.MESSAGE_ERROR)
+					self.MessageBox(self.window,"<b>Password too short! 15 Characters Required.</b>",gtk.MESSAGE_ERROR)
 			else:
 				self.MessageBox(self.window,"<b>Passwords Don't Match!</b>",gtk.MESSAGE_ERROR)
 			
@@ -1153,6 +1172,14 @@ class Display_Menu:
 				f.write('logvol /opt --fstype=ext4 --name=lv_opt --vgname=vg1 --size=512 --grow --percent='+str(self.opt_partition.get_value_as_int())+'\n')
 			if self.www_partition.get_value_as_int() >= 1:
 				f.write('logvol /var/www --fstype=ext4 --name=lv_www --vgname=vg1 --size=512 --grow --percent='+str(self.www_partition.get_value_as_int())+'\n')
+			f.close()
+			f = open('/tmp/system-choice','w')
+			if self.tim_install.get_active() == True:
+				f.write('echo Installing tim config')
+				f.write('/opt/tim_config/install\n')
+			if self.core_install.get_active() == True:
+				f.write('echo Installing core config')
+				f.write('/opt/core_config/install\n')
 			f.close()
 			gtk.main_quit()
 			
